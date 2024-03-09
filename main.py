@@ -62,6 +62,21 @@ class TestDNAToolKitFunctions(unittest.TestCase):
       result = gc_content_subsections(sequence_to_test, 5)
       self.assertEqual(result, [40, 20, 40, 60, 20, 60, 60, 40, 0, 60], f"Test 8 Failed.")
 
+    def test_translate_seq(self):
+      ''' Test case for translate_seq function'''
+      # Test 9: Returns correct result
+      sequence_to_test = "TTGTCAGTATTTGACCATCCCTTTACCATGGATGGCGAAAAATAAAGCAG"
+      result = translate_seq(sequence_to_test)
+      print(codon_freq(sequence_to_test, "L"))
+      self.assertEqual(result, ['L', 'S', 'V', 'F', 'D', 'H', 'P', 'F', 'T', 'M', 'D', 'G', 'E', 'K', '_', 'S'], f"Test 9 Failed.")
+
+
+    def test_codon_freq(self):
+      ''' Test case for codon_freq function'''
+      # Test 10: Returns correct result
+      sequence_to_test = "TTGTCAGTATTTGACCATCCCTTTACCATGGATGGCGAAAAATAAAGCAG"
+      result = codon_freq(sequence_to_test, "L")
+      self.assertEqual(result, {'TTG': 1.0}, f"Test 10 Failed.")
 
 if __name__ == '__main__':
     unittest.main()
