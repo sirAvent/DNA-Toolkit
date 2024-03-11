@@ -1,6 +1,7 @@
 # DNAToolkit test file
 import unittest
 from DNAToolkit import *
+from NucleicAcid import NucleicAcid
 
 # Test class
 class TestDNAToolKitFunctions(unittest.TestCase):
@@ -8,6 +9,7 @@ class TestDNAToolKitFunctions(unittest.TestCase):
         """Test cases for validateSeq function"""
         # Test 1: Validate Sequence is True
         sequence_to_test = "ACGTCGATCGGTA"
+        bclass = NucleicAcid(sequence_to_test)
         result = validateSeq(sequence_to_test)
         self.assertTrue(result, f"Test 1 Failed. Expected: True, Actual: {result}")
 
@@ -59,7 +61,9 @@ class TestDNAToolKitFunctions(unittest.TestCase):
       ''' Test case for GC Content subsections'''
       # Test 8: Returns correct result
       sequence_to_test = "TTGTCAGTATTTGACCATCCCTTTACCATGGATGGCGAAAAATAAAGCAG"
+      bclass = NucleicAcid(sequence_to_test)
       result = gc_content_subsections(sequence_to_test, 5)
+      result = bclass.get_gc_content_subsections(5)
       self.assertEqual(result, [40, 20, 40, 60, 20, 60, 60, 40, 0, 60], f"Test 8 Failed.")
 
     def test_translate_seq(self):
@@ -75,8 +79,11 @@ class TestDNAToolKitFunctions(unittest.TestCase):
       ''' Test case for codon_freq function'''
       # Test 10: Returns correct result
       sequence_to_test = "TTGTCAGTATTTGACCATCCCTTTACCATGGATGGCGAAAAATAAAGCAG"
+      bclass = NucleicAcid(sequence_to_test)
       result = codon_freq(sequence_to_test, "L")
+      result = bclass.get_codon_frequency("L")
       self.assertEqual(result, {'TTG': 1.0}, f"Test 10 Failed.")
 
 if __name__ == '__main__':
+    # TODO: Test NucleicAcid class
     unittest.main()
