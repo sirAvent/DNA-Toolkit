@@ -1,4 +1,7 @@
-Nucleotides = ['A', 'C', 'G', 'T']
+NUCLEOTIDE_BASE = {
+  "DNA": ['A', 'T', 'C', 'G'],
+  "RNA": ['A', 'U', 'C', 'G'],
+}
 
 DNA_Codons = {
   # 'M' - START, '_' - STOP

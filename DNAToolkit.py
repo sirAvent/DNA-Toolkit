@@ -8,7 +8,7 @@ def validateSeq(dna_seq: str) -> bool:
   Return true if the sequence is valid
   '''
   for n in dna_seq:
-    if n not in Nucleotides:
+    if n not in NUCLEOTIDE_BASE["DNA"]:
       return False
   return False if len(dna_seq) == 0 else True
 

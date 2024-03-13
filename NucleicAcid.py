@@ -1,14 +1,15 @@
 from collections import Counter
-from structures import DNA_Codons
+from structures import NUCLEOTIDE_BASE, DNA_Codons, RNA_Codons
 
 
 class NucleicAcid:
-  ''' DNA sequence class. Default values: ATCG, DNA, No label '''
+  ''' Nucleic Acid class. Default values: ATCG, DNA, No label '''
 
   def __init__(self, seq="ATCG", seq_type="DNA", label="No label") -> None:
     self.seq = seq.upper()
     self.seq_type = seq_type
     self.label = label
+    assert self.seq_type in ["RNA", "DNA"], f"Provided sequence type must be \"DNA\" or \"RNA\": {self.seq_type}\n "
     assert self.__validate(), f"Provided DNA sequence is not valid: {self.seq}"
   
 
@@ -17,7 +18,8 @@ class NucleicAcid:
     Check if a DNA sequence string has valid nucleotides(A, C, G, T) and is capitalized.
     Return true if the sequence is valid
     '''
-    return {'A', 'C', 'G', 'T'}.issuperset(self.seq)
+    nucleotide_base = NUCLEOTIDE_BASE["DNA"] if self.seq_type == "DNA" else NUCLEOTIDE_BASE["RNA"]
+    return set(nucleotide_base).issuperset(self.seq)
   
 
   def get_type(self) -> str:
@@ -42,14 +44,20 @@ class NucleicAcid:
     Return an RNA transcription of the DNA sequence.
     '''
     # DNA is transcribed into RNA to be used to create proteins from codons
-    return self.seq.replace('T', 'U')
+    if self.seq_type == "DNA":
+      return self.seq.replace('T', 'U')
+    else:
+      return "Cannot transcribe RNA."
   
 
   def get_reverse_complement(self) -> str:
     '''
     Return a reverse-complement counterpart of the DNA sequence.
     '''
-    mapping = str.maketrans('ATCG', 'TAGC')
+    if self.seq_type == "DNA":
+      mapping = str.maketrans('ATCG', 'TAGC')
+    else:
+      mapping = str.maketrans('AUCG', 'UAGC')
     return self.seq.translate(mapping)[::-1]
   
 
@@ -72,11 +80,12 @@ class NucleicAcid:
     return result
   
 
-  def get_dna_translation(self, init_pos=0) -> list:
+  def get_translation(self, init_pos=0) -> list:
     '''
     Returns a list of codons/amino acids from a DNA sequence.
     '''
-    return [DNA_Codons[self.seq[pos:pos + 3]] for pos in range(init_pos, len(self.seq) - 2, 3)]
+    codon_dict = DNA_Codons if self.seq_type == "DNA" else RNA_Codons
+    return [codon_dict[self.seq[pos:pos + 3]] for pos in range(init_pos, len(self.seq) - 2, 3)]
   
 
   def get_codon_frequency(self, aminoacid: str) -> dict:
@@ -85,10 +94,12 @@ class NucleicAcid:
     Frequency is returned as a ratio over total codons found for a given aminoacid.
     '''
     codon_list = []
+    codon_dict = DNA_Codons if self.seq_type == "DNA" else RNA_Codons
+
     for i in range(0, len(self.seq) - 2, 3):
-      if DNA_Codons[self.seq[i:i + 3]] == aminoacid:
+      if (self.seq_type == "DNA" and codon_dict[self.seq[i:i + 3]] == aminoacid):
         codon_list.append(self.seq[i:i + 3])
-    
+
     result = dict(Counter(codon_list))
     totalWight = sum(result.values())
     for seq in result:
@@ -102,13 +113,13 @@ class NucleicAcid:
     Return a list of 6 reading frames which are in string format.
     '''
     frames = []
-    frames.append(self.get_dna_translation(0))
-    frames.append(self.get_dna_translation(1))
-    frames.append(self.get_dna_translation(2))
+    frames.append(self.get_translation(0))
+    frames.append(self.get_translation(1))
+    frames.append(self.get_translation(2))
     tmp_seq = NucleicAcid(self.get_reverse_complement(), self.seq_type)
-    frames.append(tmp_seq.get_dna_translation(0))
-    frames.append(tmp_seq.get_dna_translation(1))
-    frames.append(tmp_seq.get_dna_translation(2))
+    frames.append(tmp_seq.get_translation(0))
+    frames.append(tmp_seq.get_translation(1))
+    frames.append(tmp_seq.get_translation(2))
     del tmp_seq
     return frames
   

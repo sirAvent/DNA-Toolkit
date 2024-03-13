@@ -2,6 +2,7 @@
 import unittest
 from DNAToolkit import *
 from NucleicAcid import NucleicAcid
+import random
 
 # Test class
 class TestDNAToolKitFunctions(unittest.TestCase):
@@ -86,4 +87,22 @@ class TestDNAToolKitFunctions(unittest.TestCase):
 
 if __name__ == '__main__':
     # TODO: Test NucleicAcid class
-    unittest.main()
+    # unittest.main()
+    seq = ''.join([random.choice(NUCLEOTIDE_BASE["DNA"]) for x in range(40)])
+    test_dna = NucleicAcid(seq, "DNA", "Randomly generated sequence")
+    
+
+    print(test_dna.get_info())
+    print(test_dna.count_nucleotides())
+    print(test_dna.get_transcription())
+    print(test_dna.get_reverse_complement())
+    print(test_dna.get_gc_content())
+    print(test_dna.get_gc_content_subsections())
+    print(test_dna.get_translation())
+    print(test_dna.get_codon_frequency('L'))
+
+    for rf in test_dna.get_reading_frames():
+      print(rf)
+
+
+    print(test_dna.get_proteins_from_otf())
