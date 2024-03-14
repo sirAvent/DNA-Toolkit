@@ -2,6 +2,7 @@
 import unittest
 from DNAToolkit import *
 from NucleicAcid import NucleicAcid
+from utilities import readFASTA, readTextFile, writeTextFile
 import random
 
 # Test class
@@ -105,4 +106,7 @@ if __name__ == '__main__':
       print(rf)
 
 
-    print(test_dna.get_proteins_from_otf())
+    # print(test_dna.get_proteins_from_otf())
+    # for rf in test_dna.get_reading_frames():
+    #       writeTextFile("text.txt", str(rf), 'a')
+    
